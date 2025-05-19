@@ -40,3 +40,6 @@ int main(){
 
     return 0;
 }
+
+//The race condition returns either 0 or 2. To handle this so that
+// multiple result could come, we use deadlock(mutex lock, semaphor)
