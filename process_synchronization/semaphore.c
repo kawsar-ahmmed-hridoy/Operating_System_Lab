@@ -2,16 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<unistd.h>
+#include<semaphore.h>
 
 int sharedMemory=1;
-pthread_mutex_t mtx;
+sem_t sm;
 
 void* thread1(){
 
-    printf("Thread1 is trying to acquire lock\n");
-    pthread_mutex_lock(&mtx);
-    printf("Thread1 acquired lock\n");
-
+    sem_wait(&sm);
+    
     int x=sharedMemory;
     printf("Current value of shared memory: %d\n",x);
     x++;
@@ -20,16 +19,13 @@ void* thread1(){
     sharedMemory=x;
     printf("Updated value of shared memory: %d\n",sharedMemory);
 
-    pthread_mutex_unlock(&mtx);
-    printf("Thread1 released lock\n");
+    sem_post(&sm);
 
 }
 
 void* thread2(){
 
-    printf("Thread2 is trying to acquire lock\n");
-    pthread_mutex_lock(&mtx);
-    printf("Thread2 acquired lock\n");
+    sem_wait(&sm);
 
     int x=sharedMemory;
     printf("Current value of shared memory: %d\n",x);
@@ -39,16 +35,15 @@ void* thread2(){
     sharedMemory=x;
     printf("Updated value of shared memory: %d\n",sharedMemory);
 
-    pthread_mutex_unlock(&mtx);
-    printf("Thread2 released lock\n");
-
+    sem_post(&sm);
 }
 
 int main(){
 
     printf("Main thread.\n");
 
-    pthread_mutex_init(&mtx, NULL);
+    sem_init(&sm, 0, 1);// first one address, second one (0 for thread, 1 2 3.. for processes), thrid one value of semaphore
+
 
     pthread_t th1,th2;
     pthread_create(&th1, NULL, &thread1, NULL);
@@ -58,9 +53,7 @@ int main(){
     pthread_join(th2, NULL);
 
     printf("Final value of shared memory is: %d\n", sharedMemory);
-    pthread_mutex_destroy(&mtx);
+    sem_destroy(&sm);
 
     return 0;
 }
-
-// By removing the mutex lock, we'll again enter in the race condition.
