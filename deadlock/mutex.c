@@ -63,3 +63,4 @@ int main(){
     return 0;
 }
 
+// By removing the mutex lock, we'll again enter in the race condition.
