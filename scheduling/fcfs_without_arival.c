@@ -31,5 +31,5 @@ int main(){
     avg_wt/=4;
     avg_tat/=4;
 
-    printf("Average waiting time: %f and Average waiting time: %f\n", avg_wt, avg_tat);
+    printf("Average waiting time: %f and Average turnaround time: %f\n", avg_wt, avg_tat);
 }
