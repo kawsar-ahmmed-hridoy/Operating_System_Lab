@@ -5,12 +5,19 @@
 using namespace std;
 
 void copyFile(string src, string dst){
-
     string line;
-    ifstream in {src};
-    ofstream out {dst};
+    ifstream in{src};
+    ofstream out{dst};
+    //ofstream out(dst,ios::app) to append
 
     if(in && out){
+    // char ch;
+    // int count = 0;
+    // while (in.get(ch) && count < n) {  n=total characters
+    //     out.put(ch);
+    //     count++;
+    // }
+
         while(getline(in, line)){
             out << line << "\n";
         }
